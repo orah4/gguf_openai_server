@@ -9,6 +9,7 @@ from config import  RATE_LIMIT, RAG_TOP_K, RAG_USE_LLM
 from auth import require_api_key
 from llm_engine import chat_completion
 from rag_store import init_rag_db, ingest_docs, search
+from llm_engine import init_llm
 
 app = Flask(__name__)
 
@@ -255,6 +256,7 @@ def mcp_run():
 # =============================
 def create_app():
     init_rag_db()
+    init_llm()
     return app
 
 # Expose app for Gunicorn
