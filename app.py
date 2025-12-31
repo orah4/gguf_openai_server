@@ -236,14 +236,25 @@ def mcp_run():
 # =============================
 # ENTRY
 # =============================
-if __name__ == "__main__":
-    init_rag_db()
+# if __name__ == "__main__":
+#     init_rag_db()
    
    
-    port = int(os.environ.get("PORT", 10000))
+#     port = int(os.environ.get("PORT", 10000))
 
-    app.run(
-        host="0.0.0.0",
-        port=port,
-        debug=False
-    )
+#     app.run(
+#         host="0.0.0.0",
+#         port=port,
+#         debug=False
+#     )
+
+
+# =============================
+# APP FACTORY (Render / Gunicorn)
+# =============================
+def create_app():
+    init_rag_db()
+    return app
+
+# Expose app for Gunicorn
+app = create_app()
