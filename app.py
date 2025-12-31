@@ -4,7 +4,8 @@ from flask import Flask, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
-from config import PORT, RATE_LIMIT, RAG_TOP_K, RAG_USE_LLM
+# from config import PORT, RATE_LIMIT, RAG_TOP_K, RAG_USE_LLM
+from config import  RATE_LIMIT, RAG_TOP_K, RAG_USE_LLM
 from auth import require_api_key
 from llm_engine import chat_completion
 from rag_store import init_rag_db, ingest_docs, search
