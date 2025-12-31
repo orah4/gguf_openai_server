@@ -25,6 +25,7 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
+# System deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential gcc g++ \
     && rm -rf /var/lib/apt/lists/*
@@ -38,5 +39,5 @@ RUN mkdir -p /app/data /app/models
 
 ENV PYTHONUNBUFFERED=1
 
-# ✅ MUST be shell form so $PORT expands
-CMD gunicorn -w 1 -b 0.0.0.0:$PORT app:app
+# ✅ SHELL FORM (THIS FIXES $PORT)
+CMD gunicorn -w 1 -b 0.0.0.0:${PORT} app:app
