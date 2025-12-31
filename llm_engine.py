@@ -64,7 +64,18 @@ def load_llm():
 
 
 # =============================
-# PROMPT CONVERSION (FIXED)
+# INIT AT STARTUP (REQUIRED)
+# =============================
+def init_llm():
+    """
+    Called at app startup to preload the model.
+    Prevents Gunicorn worker timeout on first request.
+    """
+    load_llm()
+
+
+# =============================
+# PROMPT CONVERSION
 # =============================
 def messages_to_prompt(messages: List[Dict[str, str]]) -> str:
     """
@@ -86,7 +97,7 @@ def messages_to_prompt(messages: List[Dict[str, str]]) -> str:
         else:
             prompt_parts.append(f"<<USER>>\n{content}\n")
 
-    # 🔴 CRITICAL: force assistant turn
+    # 🔴 FORCE assistant response
     prompt_parts.append("<<ASSISTANT>>\n")
 
     return "".join(prompt_parts)
@@ -111,7 +122,6 @@ def chat_completion(
         echo=False,
     )
 
-    # ✅ ALWAYS extract text properly
     text = result["choices"][0]["text"]
 
     if not isinstance(text, str):
@@ -119,7 +129,6 @@ def chat_completion(
 
     text = text.strip()
 
-    # 🔍 HARD SAFETY CHECK
     if not text:
         raise RuntimeError(
             "LLM generated tokens but returned empty text. "
