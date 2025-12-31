@@ -21,17 +21,17 @@
 # CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:$PORT", "app:app"]
 
 
-FROM python:3.10-slim
+FROM python:3.10
 
 WORKDIR /app
 
-# System deps
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
     build-essential gcc g++ \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
@@ -39,5 +39,4 @@ RUN mkdir -p /app/data /app/models
 
 ENV PYTHONUNBUFFERED=1
 
-# ✅ SHELL FORM (THIS FIXES $PORT)
-CMD gunicorn -w 1 -b 0.0.0.0:${PORT} app:app
+CMD gunicorn -w 1 -b 0.0.0.0:$PORT app:app
