@@ -39,4 +39,4 @@ RUN mkdir -p /app/data /app/models
 ENV PYTHONUNBUFFERED=1
 
 # ✅ FIX: increase gunicorn timeout to prevent GGUF load kill
-CMD ["gunicorn", "-w", "1", "-k", "sync", "--timeout", "180", "-b", "0.0.0.0:$PORT", "app:app"]
+CMD gunicorn -w 1 -k sync --timeout 180 -b 0.0.0.0:$PORT app:app
